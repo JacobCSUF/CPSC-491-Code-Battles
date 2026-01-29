@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            {% if title %}
+            FastAPI Blog - {{title}}
+            {% else %}
+            FastAPI Blog
+            {% endif %}
+        </title>
+    </head>
+    <body>
+      CREATE ROOM             JOIN ROOM
+   <form  action="/lobby" method="get">
+    <input id="lobby" type="text" name="lobby_id" placeholder="Room name" required />
+      <input id="name" type="text" name="nickname" placeholder="Nickname"required />
+    <button type="submit">Join Room</button>
+</form>
+      <script src="/static/scripts.js"></script>
+    </body>
+</html>
