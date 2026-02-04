@@ -6,7 +6,11 @@
         lobby
         </title>
     </head>
-    <body>
+    <body data-lobby-id="{{lobby_id}}" data-nickname="{{nickname}}"></body>>
+         {% if lobby_id %}
+            Lobby ID: -{{lobby_id}} Name: {{nickname}}
+            {% endif %}
+
       <form action="/game" method="get">
   
     <button type="submit">START GAME</button>

@@ -1,11 +1,13 @@
-function sendMessage(event) {
-    event.preventDefault(); // prevent page reload
-    
-    const room = document.getElementById("roomInput").value; // get room name
-    const ws = new WebSocket(`ws://localhost:8000/lobby/${room}`); // connect to dynamic room
+function connect(event) {
+   
+    const lobbyId = document.body.dataset.lobbyId;
+    const nickname = document.body.dataset.nickname;
+
+   
+    const ws = new WebSocket(`ws://localhost:8000/lobby/${lobbyId}`); // connect to dynamic room
 
     ws.onopen = () => {
-        console.log("Connected to room:", room);
+        console.log("Connected to room:", lobbyId);
         ws.send("Hello from client!"); // optional: send a message right away
     };
 
@@ -14,10 +16,11 @@ function sendMessage(event) {
     };
 
     ws.onclose = () => {
-        console.log("Disconnected from room:", room);
+        console.log("Disconnected from room:", lobbyId);
     };
 
     ws.onerror = (err) => {
-        console.error("WebSocket error:", err);
+        console.error("WebSocket error:", lobbyId);
     };
 }
+window.addEventListener("load", connect);
