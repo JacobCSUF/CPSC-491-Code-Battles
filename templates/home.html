@@ -1,16 +1,41 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>
-            
-        </title>
+        <title></title>
+            <link rel = "stylesheet" href ="home.css">
+        
     </head>
     <body>
-      CREATE ROOM             JOIN ROOM
-   <form  action="/lobby" method="get">
-    <input id="lobby" type="text" name="lobby_id" placeholder="Room name" required />
-      <input id="name" type="text" name="nickname" placeholder="Nickname"required />
-    <button type="submit">Join Room</button>
-</form>
+        <header>
+            <h1 id="title">Code battles </h1>
+        </header>
+
+         
+         
+        <div id = "container">
+         <div id = "card">
+            <h2 id ="subtitle">Create Room</h2>
+            <form  action="/lobby.html" method="get">
+                <input id="lobby" type="text" name="lobby_id" placeholder="Room ID" required />
+                <input id="name" type="text" name="nickname" placeholder="Player Name" required />
+                <button  id = "button_press" type="submit">Create Room</button>
+                <p id="description">Create a new game and invite your friend</p>
+            </form>
+            </div>
+            <div id = "card">
+                <h2 id ="subtitle">Join Room</h2>
+            <form  action="/lobby.html" method="get">
+                <input id="lobby" type="text" name="lobby_id" placeholder="Room ID" required />
+                <input id="name" type="text" name="nickname" placeholder="Player Name" required />
+                <button  id = "button_press" type="submit">Join Room</button>
+                <p id = "description">Join a new game and play with your friend</p>
+            </form>
+            
+            </div>
+         
+         </div>
+      
+      
+   
     </body>
 </html>
