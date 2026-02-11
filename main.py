@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from models import Player, Lobby, Question
-from ai_service import generate_coding_question, generate_multiple_questions
+
 
 import json
 from typing import Dict
@@ -14,13 +14,7 @@ app = FastAPI(title="Code Battles API")
 templates = Jinja2Templates(directory="templates") 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Configure this for production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
 
 lobbies: Dict[str, Lobby] = {} # Dict, ask team for confirmation
                                # dict with typing incorperated, more clarity
