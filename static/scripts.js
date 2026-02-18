@@ -4,16 +4,19 @@ function connect(event) {
     const nickname = document.body.dataset.nickname;
 
    
-    const ws = new WebSocket(`ws://localhost:8000/lobby/${lobbyId}`); // connect to dynamic room
+    const ws = new WebSocket(`ws://localhost:8000/lobby/${lobbyId}?nickname=${encodeURIComponent(nickname)}`);
 
     ws.onopen = () => {
         console.log("Connected to room:", lobbyId);
-        ws.send("Hello from client!"); // optional: send a message right away
+        ws.send("I joined the room!"); // optional: send a message right away
     };
 
-    ws.onmessage = (msg) => {
-        console.log("Message from server:", msg.data);
-    };
+     ws.onmessage = (msg) => {
+    const [membersText, lastAction] = msg.data.split("|"); // server sends "Alice, Bob | Bob joined"
+    
+    document.getElementById("members").textContent = membersText.trim();
+    document.getElementById("last-action").textContent = lastAction ? lastAction.trim() : "";
+};
 
     ws.onclose = () => {
         console.log("Disconnected from room:", lobbyId);

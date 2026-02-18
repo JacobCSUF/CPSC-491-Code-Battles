@@ -1,21 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>
+
+<head>
+    <title>
 
         lobby
-        </title>
-    </head>
-    <body data-lobby-id="{{lobby_id}}" data-nickname="{{nickname}}"></body>>
-         {% if lobby_id %}
-            Lobby ID: -{{lobby_id}} Name: {{nickname}}
-            {% endif %}
+    </title>
+</head>
 
-      <form action="/game" method="get">
-  
+<body data-lobby-id="{{lobby_id}}" data-nickname="{{nickname}}">
+{% if lobby_id %}
+Lobby ID: {{lobby_id}} Name: {{nickname}}
+{% endif %}
+
+
+<div>
+    <strong>Members:</strong>
+    <div id="members"></div>
+</div>
+
+<div>
+    <strong>Last Action:</strong>
+    <div id="last-action"></div>
+</div>
+
+<form action="/game" method="get">
     <button type="submit">START GAME</button>
-    <script src="/static/scripts.js"></script>
-</body>
+</form>
 
 
+
+<script src="/static/scripts.js"></script>
+</body> 
 </html>
