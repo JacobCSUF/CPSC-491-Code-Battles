@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 import os
 
-
+export OPENAI_API_KEY="your_api_key_here"
 openai.api_key = os.getenv("OPENAI_API_KEY")  # Set this environment variable
 
 
@@ -73,4 +73,5 @@ async def generate_coding_question(language: str, difficulty: str) -> Question:
 
 
     
+
 
