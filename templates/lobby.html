@@ -6,12 +6,75 @@
 
         lobby
     </title>
+    <link rel = "stylesheet" href ="lobby.css">
 </head>
 
 <body data-lobby-id="{{lobby_id}}" data-nickname="{{nickname}}">
 {% if lobby_id %}
 Lobby ID: {{lobby_id}} Name: {{nickname}}
 {% endif %}
+
+
+
+<div class="container">
+
+    <!-- LEFT SIDE -->
+    <section class="lobby">
+        <h1>Game Lobby</h1>
+        <p class="welcome">Welcome, Player1!</p>
+
+        <div class="lobby-code-box">
+            <span class="label">Lobby Code</span>
+            <div class="code-row">
+                <span id="lobbyCode">ABCD3F</span>
+                <button id="copyBtn">Copy</button>
+            </div>
+        </div>
+
+        <h2>Players (4)</h2>
+        <ul class="players">
+            <li><strong>Player1</strong> <span class="tag">You</span></li>
+            <li>CodeMaster</li>
+            <li>JavaDev</li>
+            <li>PythonPro</li>
+        </ul>
+    </section>
+
+    <!-- RIGHT SIDE -->
+    <section class="settings">
+        <h1>Game Settings</h1>
+        <p class="subtitle">Configure your coding challenge</p>
+
+        <label>Programming Language</label>
+        <select>
+            <option>Python</option>
+            <option>JavaScript</option>
+            <option>Java</option>
+            <option>C++</option>
+        </select>
+
+        <label>Difficulty</label>
+        <select>
+            <option>Easy</option>
+            <option>Medium</option>
+            <option>Hard</option>
+            <option>Expert</option>
+        </select>
+        <label>Topic</label>
+        <select>
+            <option>For Loops</option>
+            <option>While Loops</option>
+            <option>Functions</option>
+            <option>Arrays</option>
+        </select>
+
+        <button class="start-btn">Start Game</button>
+    </section>
+
+</div>
+
+
+<!--Old code below -->>
 
 
 <div>
