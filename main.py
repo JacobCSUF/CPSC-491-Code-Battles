@@ -4,8 +4,10 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
+#newfile with connection managers
+from connection_managers import LobbyManager, GameManager
 
-import json
+
 from typing import Dict
 
 app = FastAPI(title="Code Battles API")
@@ -29,68 +31,26 @@ async def lobby(request: Request, lobby_id: str, nickname: str):
 #lobby page
 @app.get("/game")
 async def game(request: Request, lobby_id: str, nickname: str):
-    print("User: "+ nickname +" joined room: "+ lobby_id)
+    print("User: "+ nickname +" joined game: "+ lobby_id)
     
     return templates.TemplateResponse("game.html", {"request": request,"lobby_id": lobby_id,"nickname": nickname})
 
 
-#websocket plus nickname associated with that websocket
-class Connection:
-    def __init__(self, websocket: WebSocket, nickname: str):
-        self.websocket = websocket
-        self.nickname = nickname
-        
 
-#handles connections
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: list[Connection] = []
-        self.lobby = Lobby()
-
-    async def connect(self, websocket: WebSocket, nickname: str):
-        await websocket.accept()
-
-        self.active_connections.append(Connection(websocket,nickname))
-
-    def disconnect(self, websocket: WebSocket):
-        for i in self.active_connections:
-            if i.websocket == websocket:
-                self.active_connections.remove(i)
-
-    async def broadcast(self, message: str):
-        for connection in self.active_connections:
-            await connection.websocket.send_text(message)
-
-    def get_names(self):
-         return ", ".join(conn.nickname for conn in self.active_connections)
-
-
-
-class Lobby:
-     def __init__(self):
-        self.language = "python"
-        self.difficulty = "easy"
-        self.topic = "if statements"
 
 
 lobbies = {}      
-#each websocket will have its own Connection Manager
-#lobbies = {
- #   212122 : 
- #   "connection": Websocket,
- #   "lobby": Lobby 
-#}
-
+games = {}
 
 import asyncio
 @app.websocket("/lobby/{lobby_id}")
-async def websocket_endpoint(websocket: WebSocket, lobby_id):
+async def websocket_lobby_endpoint(websocket: WebSocket, lobby_id):
     nickname = websocket.query_params.get("nickname")
     #ADD username to that lobby 
     #Signal over websockets the new user that joined
 
     if lobby_id not in lobbies:
-        lobbies[lobby_id] = ConnectionManager()
+        lobbies[lobby_id] = LobbyManager()
         
     
     manager = lobbies[lobby_id]
@@ -110,6 +70,7 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id):
            
             #if the message is start game, broadcast to all members of lobby that the game is starting
             #in javascript this will trigger the game page to open
+            #TODO destroy the lobby key in the dictonary
             if data == "start_game":
                 await  manager.broadcast("start_game")
 
@@ -126,7 +87,25 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id):
 
 
 
-import asyncio
+
 @app.websocket("/game/{lobby_id}")
-async def websocket_endpoint(websocket: WebSocket, lobby_id):
+async def websocket_game_endpoint(websocket: WebSocket, lobby_id):
     nickname = websocket.query_params.get("nickname")
+    if lobby_id not in games:
+        games[lobby_id] = GameManager()  
+    
+    manager = games[lobby_id]
+    await manager.connect(websocket,nickname)
+    
+    try:
+        while True:
+            data = await websocket.receive_json()
+            
+            if data["type"] == "answer":
+                await manager.sent_answer(websocket, data["answer"])
+
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+
+
+
