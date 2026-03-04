@@ -26,15 +26,12 @@ async def lobby(request: Request, lobby_id: str, nickname: str):
     return templates.TemplateResponse("lobby.html", {"request": request,"lobby_id": lobby_id,"nickname": nickname})
 
 
-
-#game page
+#lobby page
 @app.get("/game")
-async def game(request: Request):
-    return templates.TemplateResponse("game.html", {"request": request})
-
-
-
-
+async def game(request: Request, lobby_id: str, nickname: str):
+    print("User: "+ nickname +" joined room: "+ lobby_id)
+    
+    return templates.TemplateResponse("game.html", {"request": request,"lobby_id": lobby_id,"nickname": nickname})
 
 
 #websocket plus nickname associated with that websocket
@@ -48,6 +45,7 @@ class Connection:
 class ConnectionManager:
     def __init__(self):
         self.active_connections: list[Connection] = []
+        self.lobby = Lobby()
 
     async def connect(self, websocket: WebSocket, nickname: str):
         await websocket.accept()
@@ -68,8 +66,20 @@ class ConnectionManager:
 
 
 
+class Lobby:
+     def __init__(self):
+        self.language = "python"
+        self.difficulty = "easy"
+        self.topic = "if statements"
+
+
+lobbies = {}      
 #each websocket will have its own Connection Manager
-lobbies = {}
+#lobbies = {
+ #   212122 : 
+ #   "connection": Websocket,
+ #   "lobby": Lobby 
+#}
 
 
 import asyncio
@@ -84,21 +94,39 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id):
         
     
     manager = lobbies[lobby_id]
-
+    
     await manager.connect(websocket,nickname)
-
+    
      # Broadcast join
     members = manager.get_names()
     await manager.broadcast(f"{members} | {nickname} joined")
-
+    
     try:
         while True:
+            
             # Wait for any message (optional)
             data = await websocket.receive_text()
-          
+            
+           
+            #if the message is start game, broadcast to all members of lobby that the game is starting
+            #in javascript this will trigger the game page to open
+            if data == "start_game":
+                await  manager.broadcast("start_game")
+
+
+            #TODO
+            #elif data == "lobby":
+                #manager.change_lobby()
 
     except WebSocketDisconnect:
         # Remove user and broadcast leave
         manager.disconnect(websocket)
         members = manager.get_names()
         await manager.broadcast(f"{members} | {nickname} left")
+
+
+
+import asyncio
+@app.websocket("/game/{lobby_id}")
+async def websocket_endpoint(websocket: WebSocket, lobby_id):
+    nickname = websocket.query_params.get("nickname")
