@@ -6,6 +6,7 @@
 
         lobby
     </title>
+    <link rel = "stylesheet" href ="static/lobby.css">
 </head>
 
 <body data-lobby-id="{{lobby_id}}" data-nickname="{{nickname}}">
@@ -14,10 +15,62 @@ Lobby ID: {{lobby_id}} Name: {{nickname}}
 {% endif %}
 
 
-<div>
-    <strong>Members:</strong>
-    <div id="members"></div>
+
+<div class="container">
+
+    <!-- LEFT SIDE -->
+    <section class="lobby">
+        <h1>Game Lobby</h1>
+       
+
+        <div class="lobby-code-box">
+            <span class="label">Lobby Code</span>
+            <div class="code-row">
+                <span id="lobbyCode">ABCD3F</span>
+                <button id="copyBtn">Copy</button>
+            </div>
+        </div>
+
+       
+        <h2 id="playerCount">Players (0)</h2>
+        <ul class="players" id="playersList"></ul>
+    </section>
+
+    <!-- RIGHT SIDE -->
+    <section class="settings">
+        <h1>Game Settings</h1>
+        <p class="subtitle">Configure your coding challenge</p>
+
+        <label>Programming Language</label>
+        <select>
+            <option>Python</option>
+            <option>JavaScript</option>
+            <option>Java</option>
+            <option>C++</option>
+        </select>
+
+        <label>Difficulty</label>
+        <select>
+            <option>Easy</option>
+            <option>Medium</option>
+            <option>Hard</option>
+            <option>Expert</option>
+        </select>
+        <label>Topic</label>
+        <select>
+            <option>For Loops</option>
+            <option>While Loops</option>
+            <option>Functions</option>
+            <option>Arrays</option>
+        </select>
+
+        <button class="start-btn"onclick="startGame()" >Start Game</button>
+    </section>
+
 </div>
+
+
+<!--Old code below -->
 
 <div>
     <strong>Last Action:</strong>
@@ -26,12 +79,8 @@ Lobby ID: {{lobby_id}} Name: {{nickname}}
 
 
 
-<form id="start-game-form">
-    <button type="button" onclick="startGame()">START GAME</button>
-</form>
 
 
-
-<script src="/static/scripts.js"></script>
+<script src="/static/lobby_scripts.js"></script>
 </body> 
 </html>
