@@ -11,6 +11,11 @@ function connect() {
     ws.onmessage = (msg) => {
         const state = JSON.parse(msg.data);
         
+        //state.question -> exact question: What is 4 + 4
+        //state.answer -> list of answers: ["124", "144", "132", "112"] 
+        //state.players -> list of players and their score: {"nickname": nickname, "score": 0}
+        //TODO add state.time -> a timer from the backend
+        //...
         document.getElementById("question").textContent = state.question;
 
         const choices = state.answers;
