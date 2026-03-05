@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from models import Player, Lobby, Question
-from ai_service import generate_coding_question, generate_multiple_questions
+from ai_integration import generate_coding_question, generate_multiple_questions
 
 import json
 from typing import Dict
