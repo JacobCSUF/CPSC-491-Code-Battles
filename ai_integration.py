@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Dict, List, Optional
-import openai
+from openai import AsyncOpenAI
 import asyncio
 import json
 import uuid
@@ -8,8 +8,22 @@ from datetime import datetime
 import os
 
 
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Set this environment variable
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+def clean_json(text: str) -> str:
+    t = text.strip()
+
+    # Remove markdown code fences if present
+    if t.startswith("```"):
+        parts = t.split("```")
+        if len(parts) >= 2:
+            t = parts[1]
+
+        # remove the word json if present
+        if t.startswith("json"):
+            t = t.replace("json", "", 1).strip()
+
+    return t
 
 
 # ChatGPT Integration
@@ -34,18 +48,16 @@ async def generate_coding_question(language: str, difficulty: str) -> Question:
     """
     
     try:
-        response = await openai.ChatCompletion.acreate(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are an expert programming instructor creating coding quiz questions."},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=500,
-            temperature=0.7
-        )
-        
-        content = response.choices[0].message.content
-        question_data = json.loads(content)
+        response = await client.responses.create(
+    model="gpt-4o-mini",
+    input=[
+        {"role": "system", "content": "You are an expert programming instructor creating coding quiz questions."},
+        {"role": "user", "content": prompt}
+    ]
+)
+
+content = response.output_text
+        question_data = json.loads(clean_json(content))
         
         return Question(
             id=str(uuid.uuid4()),
@@ -73,4 +85,5 @@ async def generate_coding_question(language: str, difficulty: str) -> Question:
 
 
     
+
 
