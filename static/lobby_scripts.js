@@ -1,10 +1,13 @@
-let ws; //change
+let ws;
 
 function connect(event) {
   const lobbyId = document.body.dataset.lobbyId;
   const nickname = document.body.dataset.nickname;
 
-  const ws = new WebSocket(
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+  const host = window.location.host;
+
+  ws = new WebSocket(
     `${protocol}://${host}/lobby/${lobbyId}?nickname=${encodeURIComponent(nickname)}`,
   );
 
