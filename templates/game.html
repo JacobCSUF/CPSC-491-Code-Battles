@@ -1,33 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <title>Game</title>
-    </head>
+  <head>
+    <title>Game</title>
+  </head>
 
-    <body data-lobby-id="{{lobby_id}}" data-nickname="{{nickname}}">
+  <body data-lobby-id="{{lobby_id}}" data-nickname="{{nickname}}">
+    {% if lobby_id %}
+    <p>Lobby: {{lobby_id}} | Player: {{nickname}}</p>
+    {% endif %}
 
-        {% if lobby_id %}
-        <p>Lobby: {{lobby_id}} | Player: {{nickname}}</p>
-        {% endif %}
+    <hr />
 
-        <hr>
+    <h3>Players</h3>
+    <ul id="players"></ul>
 
-        <h3>Players</h3>
-        <ul id="players"></ul>
+    <hr />
 
-        <hr>
+    <h3>Question</h3>
+    <p id="Timer"></p>
+    <p id="question"></p>
 
-        <h3>Question</h3>
-        <p id="question"></p>
+    <br />
 
-        <br>
+    <button id="choice1"></button>
+    <button id="choice2"></button>
+    <button id="choice3"></button>
+    <button id="choice4"></button>
+  </body>
 
-        <button id="choice1"></button>
-        <button id="choice2"></button>
-        <button id="choice3"></button>
-        <button id="choice4"></button>
-
-    </body>
-
-<script src="/static/game_scripts.js"></script>
+  <script src="/static/game_scripts.js"></script>
 </html>
