@@ -26,7 +26,7 @@ function connect(event) {
     } else {
       const [membersText, lastAction] = msg.data.split("|"); // server sends "Alice, Bob | Bob joined"
 
-      document.getElementById("players").textContent = membersText.trim();
+      document.getElementById("playersList").textContent = membersText.trim();
       document.getElementById("last-action").textContent = lastAction
         ? lastAction.trim()
         : "";
