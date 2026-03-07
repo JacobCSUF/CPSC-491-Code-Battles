@@ -4,7 +4,13 @@ function connect() {
     const lobbyId = document.body.dataset.lobbyId;
     const nickname = document.body.dataset.nickname;
 
-    ws = new WebSocket(`ws://localhost:8000/game/${lobbyId}?nickname=${encodeURIComponent(nickname)}`);
+    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+    const host = window.location.host;
+
+    ws = new WebSocket(
+        `${protocol}://${host}/game/${lobbyId}?nickname=${encodeURIComponent(nickname)}`,
+    );
+
 
     ws.onopen = () => console.log("Connected:", lobbyId);
 
