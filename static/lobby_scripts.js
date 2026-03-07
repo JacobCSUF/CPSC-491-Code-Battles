@@ -12,6 +12,8 @@ function connect(event) {
   ws = new WebSocket(
     `${protocol}://${host}/lobby/${lobbyId}?nickname=${encodeURIComponent(nickname)}`,
   );
+
+
     ws.onopen = () => {
         console.log("Connected to room:", lobbyId);
         ws.send("I joined the room!"); // optional: send a message right away
