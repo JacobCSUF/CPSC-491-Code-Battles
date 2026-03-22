@@ -1,53 +1,80 @@
 let ws;
+let timeLeft = 60;
+let timerId;
+
+// Takes in time for argument, starts the timer with the time given.
+function startTimer(timeLimit) {
+  timerElement = document.getElementById("Timer");
+  timeLeft = timeLimit;
+
+  if (timerId != null) {
+    clearInterval(timerId);
+  }
+
+  timerId = setInterval(function () {
+    timeLeft = timeLeft - 1;
+    timerElement.textContent = timeLeft;
+
+    // Timer Reaches 0 => End state
+    if (timeLeft == 0) {
+      clearInterval(timerId);
+      timerElement.textContent = "Time's up.";
+    }
+  }, 1000);
+}
 
 function connect() {
-    const lobbyId = document.body.dataset.lobbyId;
-    const nickname = document.body.dataset.nickname;
+  const lobbyId = document.body.dataset.lobbyId;
+  const nickname = document.body.dataset.nickname;
 
-    const protocol = window.location.protocol === "https:" ? "wss" : "ws";
-    const host = window.location.host;
+  const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+  const host = window.location.host;
 
-    ws = new WebSocket(
-        `${protocol}://${host}/game/${lobbyId}?nickname=${encodeURIComponent(nickname)}`,
-    );
+  ws = new WebSocket(
+    `${protocol}://${host}/game/${lobbyId}?nickname=${encodeURIComponent(nickname)}`,
+  );
 
+  ws.onopen = () => console.log("Connected:", lobbyId);
 
-    ws.onopen = () => console.log("Connected:", lobbyId);
+  ws.onmessage = (msg) => {
+    const state = JSON.parse(msg.data);
 
-    ws.onmessage = (msg) => {
-        const state = JSON.parse(msg.data);
-        
-        //state.question -> exact question: What is 4 + 4
-        //state.answer -> list of answers: ["124", "144", "132", "112"] 
-        //state.players -> list of players and their score: {"nickname": nickname, "score": 0}
-        //TODO add state.time -> a timer from the backend
-        //...
-        document.getElementById("question").textContent = state.question;
+    //state.question -> exact question: What is 4 + 4
+    //state.answer -> list of answers: ["124", "144", "132", "112"]
+    //state.players -> list of players and their score: {"nickname": nickname, "score": 0}
+    //TODO add state.time -> a timer from the backend
+    //...
+    document.getElementById("question").textContent = state.question;
+    startTimer(state.timer); // Starts timer
 
-        const choices = state.answers;
-        document.getElementById("choice1").textContent = choices[0];
-        document.getElementById("choice2").textContent = choices[1];
-        document.getElementById("choice3").textContent = choices[2];
-        document.getElementById("choice4").textContent = choices[3];
+    const choices = state.answers;
+    document.getElementById("choice1").textContent = choices[0];
+    document.getElementById("choice2").textContent = choices[1];
+    document.getElementById("choice3").textContent = choices[2];
+    document.getElementById("choice4").textContent = choices[3];
 
-        document.getElementById("choice1").onclick = () => ws.send(JSON.stringify({ type: "answer", answer: choices[0] }));
-        document.getElementById("choice2").onclick = () => ws.send(JSON.stringify({ type: "answer", answer: choices[1] }));
-        document.getElementById("choice3").onclick = () => ws.send(JSON.stringify({ type: "answer", answer: choices[2] }));
-        document.getElementById("choice4").onclick = () => ws.send(JSON.stringify({ type: "answer", answer: choices[3] }));
+    document.getElementById("choice1").onclick = () =>
+      ws.send(JSON.stringify({ type: "answer", answer: choices[0] }));
+    document.getElementById("choice2").onclick = () =>
+      ws.send(JSON.stringify({ type: "answer", answer: choices[1] }));
+    document.getElementById("choice3").onclick = () =>
+      ws.send(JSON.stringify({ type: "answer", answer: choices[2] }));
+    document.getElementById("choice4").onclick = () =>
+      ws.send(JSON.stringify({ type: "answer", answer: choices[3] }));
 
-        const playersList = document.getElementById("players");
-        while (playersList.firstChild) {
-            playersList.removeChild(playersList.firstChild);
-        }
-        state.players.forEach(player => {
-            const li = document.createElement("li");
-            li.textContent = `${player.nickname}: ${player.score}`;
-            playersList.appendChild(li);
-        });
-    };
+    const playersList = document.getElementById("players");
+    while (playersList.firstChild) {
+      playersList.removeChild(playersList.firstChild);
+    }
+    state.players.forEach((player) => {
+      const li = document.createElement("li");
+      li.textContent = `${player.nickname}: ${player.score}`;
+      playersList.appendChild(li);
+    });
+  };
 
-    ws.onclose = () => console.log("Disconnected:", lobbyId);
-    ws.onerror = (err) => console.error("WebSocket error:", err);
+  ws.onclose = () => console.log("Disconnected:", lobbyId);
+  ws.onerror = (err) => console.error("WebSocket error:", err);
 }
 
 window.addEventListener("load", connect);

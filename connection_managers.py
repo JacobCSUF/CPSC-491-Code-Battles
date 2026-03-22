@@ -56,6 +56,7 @@ class GameManager:
             "players": [],  # start empty, add as they connect
             "question": "",
             "answers": "",
+            "timer": 60
         }
         self.questions = questions  
 
