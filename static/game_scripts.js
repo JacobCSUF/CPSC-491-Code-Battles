@@ -16,6 +16,12 @@ function connect() {
 
     ws.onmessage = (msg) => {
         const state = JSON.parse(msg.data);
+
+    // Wait for questions to load
+    if (state.status === "loading") {
+        document.getElementById("question").textContent = "Loading questions...";
+        return;
+    }
         
         //state.question -> exact question: What is 4 + 4
         //state.answer -> list of answers: ["124", "144", "132", "112"] 
