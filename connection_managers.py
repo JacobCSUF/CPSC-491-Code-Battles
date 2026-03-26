@@ -1,6 +1,6 @@
 from fastapi import WebSocket
 import json
-
+from datetime import datetime
 #websocket plus nickname associated with that websocket
 class Connection:
     def __init__(self, websocket: WebSocket, nickname: str):
@@ -50,13 +50,15 @@ class GameManager:
     def __init__(self):
         self.active_connections: list[Game_Connection] = []
         self.lobby = Lobby()
+        self.question_start_time = None
         self.game_state = {
             "status": "in_progress",
             "total_questions": 10,
             "players": [],  # start empty, add as they connect
             "question": "",
             "answers": "",
-            "timer": 60
+            "timer": 60,
+            
         }
         self.questions = questions  
 
@@ -73,6 +75,7 @@ class GameManager:
                 self.active_connections.remove(i)
 
     async def broadcast_game_state(self):
+        self.question_start_time = datetime.now() # start recording when question asked
         for connection in self.active_connections:
             self.game_state["question"] = self.questions[connection.q_id]["code"]
             self.game_state["answers"] = self.questions[connection.q_id]["choices"]
@@ -85,7 +88,13 @@ class GameManager:
             if connection.websocket == websocket:
                 if self.questions[connection.q_id]["answer"] == answer:
                     connection.q_id += 1
-                    connection.score += 100
+                    
+                    # Code chunk to handle points given based on time
+                    time_taken = (datetime.now() - self.question_start_time).seconds
+                    score = round(100 *(1 - (time_taken / 60) ))
+                    
+                    connection.score += score
+                    
                 else:
                     connection.score -= 20
 
