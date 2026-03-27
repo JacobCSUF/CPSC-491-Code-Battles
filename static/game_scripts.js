@@ -45,7 +45,9 @@ function connect() {
     //TODO add state.time -> a timer from the backend
     //...
     document.getElementById("question").textContent = state.question;
-    startTimer(state.timer); // Starts timer
+    if (state.new_question == true) {
+      startTimer(state.timer);
+    }
 
     const choices = state.answers;
     document.getElementById("choice1").textContent = choices[0];

@@ -41,6 +41,8 @@ class Game_Connection:
         self.nickname = nickname
         self.q_id = 1
         self.score = 0
+        self.answered = False
+        self.question_start_time = None
 
 
 
@@ -67,19 +69,26 @@ class GameManager:
         self.active_connections.append(Game_Connection(websocket,nickname))
         #TODO change to
         self.game_state["players"].append({"nickname": nickname, "score": 0})
-        await self.broadcast_game_state()
+        await self.broadcast_game_state(True)
 
     def disconnect(self, websocket: WebSocket):
         for i in self.active_connections:
             if i.websocket == websocket:
                 self.active_connections.remove(i)
 
-    async def broadcast_game_state(self):
-        self.question_start_time = datetime.now() # start recording when question asked
+    async def broadcast_game_state(self, new_question, answered_websocket=None):
         for connection in self.active_connections:
+      
+            if connection.websocket == answered_websocket:
+                self.game_state["new_question"] = True
+                connection.question_start_time = datetime.now()
+            else:
+                self.game_state["new_question"] = new_question
+                if new_question == True:
+                    connection.question_start_time = datetime.now()
+
             self.game_state["question"] = self.questions[connection.q_id]["code"]
             self.game_state["answers"] = self.questions[connection.q_id]["choices"]
-            print(self.game_state)
             await connection.websocket.send_text(json.dumps(self.game_state))
 
 
@@ -90,7 +99,7 @@ class GameManager:
                     connection.q_id += 1
                     
                     # Code chunk to handle points given based on time
-                    time_taken = (datetime.now() - self.question_start_time).seconds
+                    time_taken = (datetime.now() - connection.question_start_time).seconds
                     score = round(100 *(1 - (time_taken / 60) ))
                     
                     connection.score += score
@@ -103,7 +112,7 @@ class GameManager:
                     if player["nickname"] == connection.nickname:
                         player["score"] = connection.score
 
-                await self.broadcast_game_state()
+                await self.broadcast_game_state(False, connection.websocket) #pass ws as local player
 
 
     def get_names(self):
