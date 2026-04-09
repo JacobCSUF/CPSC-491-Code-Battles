@@ -18,22 +18,15 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 async def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    return templates.TemplateResponse(request, "home.html")
 
-#lobby page
 @app.get("/lobby")
 async def lobby(request: Request, lobby_id: str, nickname: str):
-    print("User: "+ nickname +" joined room: "+ lobby_id)
-    
-    return templates.TemplateResponse("lobby.html", {"request": request,"lobby_id": lobby_id,"nickname": nickname})
+    return templates.TemplateResponse(request, "lobby.html", {"lobby_id": lobby_id, "nickname": nickname})
 
-
-#lobby page
 @app.get("/game")
 async def game(request: Request, lobby_id: str, nickname: str):
-    print("User: "+ nickname +" joined game: "+ lobby_id)
-    
-    return templates.TemplateResponse("game.html", {"request": request,"lobby_id": lobby_id,"nickname": nickname})
+    return templates.TemplateResponse(request, "game.html", {"lobby_id": lobby_id, "nickname": nickname})
 
 
 
