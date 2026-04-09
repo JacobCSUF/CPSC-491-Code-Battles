@@ -112,10 +112,24 @@ async def generate_multiple_questions(language: str, difficulty: str, topic: str
         Provide exactly 4 multiple choice options with only one correct answer.
         No matter the difficulty use beginner friendly syntax so favor using newlines over bunching stuff in one line.
         For example return statements shouldn't include any calculations.
+        IMPORTANT OUTPUT RULES:
+
+        - The "question" field MAY contain code with newlines.
+        - The "options" field MUST NOT contain newlines under any circumstances.
+        - Each option must be a single-line string (no \n, no code blocks, no indentation).
+        - If code appears in options, convert it into a single line.
+        - The "explanation" must also be single-line.
+        - Do NOT use triple quotes in any field.
+        - Do NOT format strings as Python code.
+        - Return only valid JSON using standard double quotes (").
+        - THERE MUST be only one print statement at the end thats the out put. Never two
+
         ### EXAMPLE OF WHAT NEVER TO DO WITH RETURN STATEMENTS#########
         def custom_range(start, end):
             return [x for x in range(start, end)]
         #################################################
+       
+        
         Make sure the {count} questions have variety.
 
         Return ONLY valid JSON as a list in this exact format:
