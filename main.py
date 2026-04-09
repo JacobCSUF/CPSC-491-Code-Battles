@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import asyncio
 #newfile with connection managers
 from connection_managers import LobbyManager, GameManager
-
+import json
 
 from typing import Dict
 
@@ -46,52 +46,58 @@ games = {}
 @app.websocket("/lobby/{lobby_id}")
 async def websocket_lobby_endpoint(websocket: WebSocket, lobby_id):
     nickname = websocket.query_params.get("nickname")
-    #ADD username to that lobby 
-    #Signal over websockets the new user that joined
 
     if lobby_id not in lobbies:
         lobbies[lobby_id] = LobbyManager()
         
-    
     manager = lobbies[lobby_id]
+    await manager.connect(websocket, nickname)
     
-    await manager.connect(websocket,nickname)
-    
-     # Broadcast join
-    members = manager.get_names()
-    await manager.broadcast(f"{members} | {nickname} joined")
+    # Broadcast join
+    await manager.broadcast(json.dumps({
+        "type": "members",
+        "members": manager.get_names(),
+        "last_action": f"{nickname} joined"
+    }))
     
     try:
         while True:
-            
-            # Wait for any message (optional)
-            data = await websocket.receive_text()
-            
-           
-           
-            #AI11 CHANGED TO CALL START GAME
-            if data == "start_game":
-               games[lobby_id] = await manager.start_game("start_game")
-                 
+            raw = await websocket.receive_text()
+            if not raw.strip():
+                continue
 
-            #TODO
-            #elif data == "lobby":
-                #manager.change_lobby()
+            try:
+                data = json.loads(raw)
+            except json.JSONDecodeError:
+                print("Bad message:", raw)
+                continue
+
+            msg_type = data.get("type")
+
+            if msg_type == "start":
+                games[lobby_id] = await manager.start_game()
+
+            elif msg_type == "lobby_settings":
+                await manager.change_lobby({
+                    "language": data["language"],
+                    "difficulty": data["difficulty"],
+                    "topic": data["topic"]
+                })
 
     except WebSocketDisconnect:
-        # Remove user and broadcast leave
         manager.disconnect(websocket)
-        members = manager.get_names()
-        await manager.broadcast(f"{members} | {nickname} left")
-
+        await manager.broadcast(json.dumps({
+            "type": "members",
+            "members": manager.get_names(),
+            "last_action": f"{nickname} left"
+        }))
 
 
 
 @app.websocket("/game/{lobby_id}")
 async def websocket_game_endpoint(websocket: WebSocket, lobby_id):
     nickname = websocket.query_params.get("nickname")
-    if lobby_id not in games:
-        games[lobby_id] = GameManager()  
+   
     
     manager = games[lobby_id]
     await manager.connect(websocket,nickname)
