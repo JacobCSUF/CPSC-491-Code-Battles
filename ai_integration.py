@@ -30,7 +30,7 @@ def get_client() -> AsyncOpenAI | None:
     global _client
     if _client is not None:
         return _client
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("OPENAI_API_KEY") or os.getenv("API_KEY")
     if not api_key:
         logger.warning("OPENAI_API_KEY is not set — question generation will use fallback questions")
         return None
