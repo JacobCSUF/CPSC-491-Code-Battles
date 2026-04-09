@@ -121,8 +121,10 @@ async def generate_multiple_questions(language: str, difficulty: str, topic: str
         Return ONLY valid JSON as a list in this exact format:
         [
         {{
-            "question": "Your question here",
-            "options": ["Option A", "Option B", "Option C", "Option D"],
+            "question": "What is the output?
+                        for i in range(3):
+                            print(i)",
+            "options": ["0 1 2", "1 2 3", "0 1", "2 1 0"],
             "correct_answer": 0,
             "explanation": "Brief explanation of why this is correct"
         }},

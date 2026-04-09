@@ -2,6 +2,8 @@
 <html>
   <head>
     <title>Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   </head>
 
   <body data-lobby-id="{{lobby_id}}" data-nickname="{{nickname}}">
@@ -15,12 +17,11 @@
     <ul id="players"></ul>
 
     <hr />
-  <!-- Container for the question -->
-  <h3>Question:</h3>
-  <pre id="question" ></pre>
-   
+
+    <h3>Question:</h3>
+    <pre><code id="question" class="language-python"></code></pre>
+
     <p id="Timer"></p>
-   
 
     <br />
 

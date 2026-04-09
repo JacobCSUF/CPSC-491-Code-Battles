@@ -51,7 +51,11 @@ function connect() {
         }
 
         if (state.status === "in_progress") {
-            document.getElementById("question").textContent = state.question;
+            const questionElement = document.getElementById("question");
+            questionElement.textContent = state.question; // set the raw code
+
+            questionElement.removeAttribute('data-highlighted');
+            hljs.highlightElement(questionElement);
 
             if (state.new_question === true) startTimer(state.timer);
 
@@ -75,7 +79,7 @@ function connect() {
                 li.textContent = `${player.nickname}: ${player.score}`;
                 playersList.appendChild(li);
             });
-        }
+}
     };
 
     ws.onclose = () => console.log("Disconnected:", lobbyId);
