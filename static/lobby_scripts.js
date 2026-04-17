@@ -1,4 +1,3 @@
-
 let ws; //change
 
 
@@ -41,11 +40,15 @@ function connect(event) {
             document.getElementById("last-action").textContent = data.last_action ?? "";
             break;
 
-        case "lobby_settings":
-            document.getElementById("language").value = data.language;
-            document.getElementById("difficulty").value = data.difficulty;
-            document.getElementById("topic").value = data.topic;
-            break;
+       case "lobby_settings":
+    document.getElementById("language").value = data.language;
+
+    // NEW: regenerate topics based on the new language
+    updateTopicDropdown();
+
+    document.getElementById("difficulty").value = data.difficulty;
+    document.getElementById("topic").value = data.topic;
+    break;
     }
 };
 
@@ -85,3 +88,31 @@ function updateSettings() {
         }));
     }
 }
+
+const topicOptions = {
+    Python: ["Lists", "Loops", "Dictionaries", "Functions", "Classes"],
+    JavaScript: ["Arrays", "Events", "DOM", "Promises", "Functions"],
+    Java: ["OOP", "Inheritance", "Loops", "Arrays", "Methods"],
+    "C++": ["Pointers", "Vectors", "Loops", "Classes", "Memory"]
+};
+
+function updateTopicDropdown() {
+    const language = document.getElementById("language").value;
+    const topicSelect = document.getElementById("topic");
+
+    // Clear old topics
+    topicSelect.innerHTML = "<option value=''>Select a topic</option>";
+
+    // Add new topics
+    if (topicOptions[language]) {
+        topicOptions[language].forEach(topic => {
+            const option = document.createElement("option");
+            option.value = topic;
+            option.textContent = topic;
+            topicSelect.appendChild(option);
+        });
+    }
+}
+document.addEventListener("DOMContentLoaded", () => {
+    updateTopicDropdown();
+});
