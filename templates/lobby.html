@@ -44,12 +44,12 @@ Lobby ID: {{lobby_id}} Name: {{nickname}}
         <p class="subtitle">Configure your coding challenge</p>
 
         <label>Programming Language</label>
-        <select id="language" onchange="updateSettings()">
-            <option>Python</option>
-            <option>JavaScript</option>
-            <option>Java</option>
-            <option>C++</option>
-        </select>
+        <select id="language" onchange="updateTopicDropdown(); updateSettings();">
+    <option value="Python">Python</option>
+    <option value="JavaScript">JavaScript</option>
+    <option value="Java">Java</option>
+    <option value="C++">C++</option>
+</select>
 
         <label>Difficulty</label>
         <select id="difficulty" onchange="updateSettings()">
@@ -60,12 +60,9 @@ Lobby ID: {{lobby_id}} Name: {{nickname}}
         </select>
 
         <label>Topic</label>
-        <select id="topic" onchange="updateSettings()">
-            <option>For Loops</option>
-            <option>While Loops</option>
-            <option>Functions</option>
-            <option>Arrays</option>
-        </select>
+<select id="topic" onchange="updateSettings()">
+    <option value="">Select a topic</option>
+</select>
 
         <button class="start-btn"onclick="startGame()" >Start Game</button>
     </section>
