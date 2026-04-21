@@ -93,7 +93,19 @@ const topicOptions = {
     Python: ["Lists", "Loops", "Dictionaries", "Functions", "Classes"],
     JavaScript: ["Arrays", "Events", "DOM", "Promises", "Functions"],
     Java: ["OOP", "Inheritance", "Loops", "Arrays", "Methods"],
-    "C++": ["Pointers", "Vectors", "Loops", "Classes", "Memory"]
+    "C++": ["Pointers", "Vectors", "Loops", "Classes", "Memory"],
+
+    CSharp: ["LINQ", "OOP", "Async/Await", "Collections", "Interfaces"],
+    Ruby: ["Blocks", "Hashes", "Classes", "Modules", "Loops"],
+    Go: ["Goroutines", "Channels", "Structs", "Interfaces", "Concurrency"],
+    Rust: ["Ownership", "Borrowing", "Traits", "Enums", "Memory Safety"],
+    PHP: ["Arrays", "Forms", "Sessions", "OOP", "Functions"],
+    Swift: ["Optionals", "Structs", "Protocols", "Closures", "UI Basics"],
+    Kotlin: ["Coroutines", "Null Safety", "Classes", "Collections", "Functions"],
+    TypeScript: ["Types", "Interfaces", "Generics", "Modules", "Classes"],
+    SQL: ["Select", "Joins", "Indexes", "Subqueries", "Aggregation"],
+    R: ["Vectors", "Data Frames", "Plots", "Statistics", "Functions"],
+    Bash: ["Variables", "Loops", "Pipes", "Permissions", "Scripting"]
 };
 
 function updateTopicDropdown() {
