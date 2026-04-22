@@ -87,22 +87,21 @@ function updateSettings() {
 }
 
 const topicOptions = {
-    Python: ["Lists", "Loops", "Dictionaries", "Functions", "Classes"],
-    JavaScript: ["Arrays", "Events", "DOM", "Promises", "Functions"],
-    Java: ["OOP", "Inheritance", "Loops", "Arrays", "Methods"],
-    "C++": ["Pointers", "Vectors", "Loops", "Classes", "Memory"],
-
-    CSharp: ["LINQ", "OOP", "Async/Await", "Collections", "Interfaces"],
-    Ruby: ["Blocks", "Hashes", "Classes", "Modules", "Loops"],
-    Go: ["Goroutines", "Channels", "Structs", "Interfaces", "Concurrency"],
-    Rust: ["Ownership", "Borrowing", "Traits", "Enums", "Memory Safety"],
-    PHP: ["Arrays", "Forms", "Sessions", "OOP", "Functions"],
-    Swift: ["Optionals", "Structs", "Protocols", "Closures", "UI Basics"],
-    Kotlin: ["Coroutines", "Null Safety", "Classes", "Collections", "Functions"],
-    TypeScript: ["Types", "Interfaces", "Generics", "Modules", "Classes"],
-    SQL: ["Select", "Joins", "Indexes", "Subqueries", "Aggregation"],
-    R: ["Vectors", "Data Frames", "Plots", "Statistics", "Functions"],
-    Bash: ["Variables", "Loops", "Pipes", "Permissions", "Scripting"]
+    Python: ["Lists", "Loops", "Dictionaries", "Functions", "Classes", "String Methods", "Tuples", "Exception Handling", "File I/O", "Recursion"],
+    JavaScript: ["Arrays", "Events", "DOM", "Promises", "Functions", "Callbacks", "Async/Await", "Error Handling", "String Methods", "Array Methods"],
+    Java: ["OOP", "Inheritance", "Loops", "Arrays", "Methods", "Interfaces", "Exception Handling", "Collections", "String Methods", "Recursion"],
+    "C++": ["Pointers", "Vectors", "Loops", "Classes", "Memory", "References", "Inheritance", "Arrays", "Exception Handling", "String Methods"],
+    CSharp: ["LINQ", "OOP", "Async/Await", "Collections", "Interfaces", "Exception Handling", "Loops", "String Methods", "Generics", "Inheritance"],
+    Ruby: ["Blocks", "Hashes", "Classes", "Modules", "Loops", "Iterators", "Exception Handling", "String Methods", "Arrays", "Symbols"],
+    Go: ["Goroutines", "Channels", "Structs", "Interfaces", "Concurrency", "Pointers", "Error Handling", "Slices", "Maps", "Loops"],
+    Rust: ["Ownership", "Borrowing", "Traits", "Enums", "Memory Safety", "Structs", "Pattern Matching", "Error Handling", "Closures", "Loops"],
+    PHP: ["Arrays", "Forms", "Sessions", "OOP", "Functions", "String Methods", "Loops", "Exception Handling", "File I/O", "Regular Expressions"],
+    Swift: ["Optionals", "Structs", "Protocols", "Closures", "UI Basics", "Enums", "Error Handling", "Loops", "Arrays", "String Methods"],
+    Kotlin: ["Coroutines", "Null Safety", "Classes", "Collections", "Functions", "Loops", "Lambdas", "Exception Handling", "String Methods", "Data Classes"],
+    TypeScript: ["Types", "Interfaces", "Generics", "Modules", "Classes", "Union Types", "Enums", "Type Guards", "Async/Await", "Array Methods"],
+    SQL: ["Select", "Joins", "Indexes", "Subqueries", "Aggregation", "Group By", "Where Clauses", "Order By", "Insert & Update", "Transactions"],
+    R: ["Vectors", "Data Frames", "Plots", "Statistics", "Functions", "Loops", "String Manipulation", "Apply Functions", "Lists", "Sorting"],
+    Bash: ["Variables", "Loops", "Pipes", "Permissions", "Scripting", "Conditionals", "Functions", "Input & Output", "String Manipulation", "File Operations"]
 };
 
 function updateTopicDropdown() {

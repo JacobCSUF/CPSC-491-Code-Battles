@@ -46,7 +46,7 @@ div {
   background-color: lightgrey;
   width: 100%;
   max-width: 320px;
-  border: 2px solid rgb(29, 2, 77);
+  border: 2px solid #c5a440;
   padding: 50px;
   margin: 20px;
   background-color: rgb(8, 43, 2);
@@ -54,7 +54,7 @@ div {
 }
 
 #button_press {
-  background-color: #6a00ff;
+  background-color: #baa113;
   color: white;
   border: none;
   padding: 10px 20px;
