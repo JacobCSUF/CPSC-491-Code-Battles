@@ -46,6 +46,7 @@ div {
   background-color: lightgrey;
   width: 100%;
   max-width: 320px;
+  border-radius: 15px;
   border: 2px solid #c5a440;
   padding: 50px;
   margin: 20px;
