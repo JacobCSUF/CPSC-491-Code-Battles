@@ -83,7 +83,7 @@ function connect() {
     }
 
     if (state.status === "game_over") {
-      showGameOver(state.sorted_players); // matches your server's key
+      showGameOver(state.sorted_players);
       return;
     }
 
@@ -99,6 +99,9 @@ function connect() {
       hljs.highlightElement(questionElement);
 
       if (state.new_question === true) startTimer(state.timer);
+
+      document.querySelector(".question-title").textContent =
+        `Question ${state.question_number} of ${state.total_questions}`;
 
       const choices = state.answers;
       for (let i = 0; i < 4; i++) {

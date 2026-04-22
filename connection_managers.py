@@ -149,6 +149,7 @@ class GameManager:
                     "status": "in_progress",
                     "question": q.question,
                     "answers": q.options,
+                    "question_number": connection.q_index + 1,
                 }
 
             print(state)
@@ -169,7 +170,7 @@ class GameManager:
                     connection.score += score
                     answered_ws = connection.websocket  
                 else:
-                    connection.score -= 20
+                    connection.score -= 25
                     answered_ws = None  
 
                 for player in self.game_state["players"]:
