@@ -37,7 +37,7 @@ function connect(event) {
                     ? `<li><strong>${name}</strong> <span class="tag">You</span></li>`
                     : `<li>${name}</li>`
             ).join("");
-            document.getElementById("last-action").textContent = data.last_action ?? "";
+           
             break;
 
        case "lobby_settings":
