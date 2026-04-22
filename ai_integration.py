@@ -107,6 +107,13 @@ async def generate_multiple_questions(language: str, difficulty: str, topic: str
 
     prompt = f"""
         Generate {count} {difficulty} level coding questions for {language} and the topic is {topic}.
+        If no topic is chosen then include a variety of questions
+        For difficulty here is how it goes:
+
+        Easy = For beginner college students/highschool
+        Medium = Somewhat experienced colled student
+        Hard = Graduated/About to graduate
+        Expert = Experienced developer. Should be long questions at least 20 lines long
 
         Each question should include a code snippet where the user guesses the output.
         Provide exactly 4 multiple choice options with only one correct answer.
@@ -187,12 +194,26 @@ async def generate_multiple_questions(language: str, difficulty: str, topic: str
         if not questions:
             raise ValueError("No valid questions could be parsed from the model response")
 
-        return questions
+        return {"good_output": True,"questions":questions}
 
     except (openai.APIError, json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
         logger.exception("Failed to generate multiple questions: %s", exc)
-        return [_fallback_question(language, difficulty) for _ in range(count)]
+      
+        return {"good_output": False,"questions":""}
 
+
+
+
+async def retry_loop(language: str, difficulty: str, topic: str, count: int = 10):
+    for i in range(5):
+        x = await generate_multiple_questions(language= language,difficulty=difficulty,topic=topic,count=count)
+        print('IM X',x)
+        if x["good_output"]:
+            return x["questions"]
+        else: continue
+    
+    questions = [_fallback_question(language, difficulty) for _ in range(count)]
+    return questions
 
 if __name__ == "__main__":
     questions = asyncio.run(generate_multiple_questions("python", "easy", "general", 10))

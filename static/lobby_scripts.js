@@ -65,18 +65,15 @@ window.addEventListener("load", connect);
 
 
 
-
-//change
 function startGame() {
     if (ws && ws.readyState === WebSocket.OPEN) {
-        
+        document.getElementById("overlay").style.display = "flex";
         ws.send(JSON.stringify({type: "start", message: "Start Game"}));
-
-        console.log("Start game sent!");
     } else {
         console.error("WebSocket not open");
     }
 }
+
 
 function updateSettings() {
     if (ws && ws.readyState === WebSocket.OPEN) {

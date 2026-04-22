@@ -2,7 +2,7 @@ from fastapi import WebSocket
 import json
 from datetime import datetime  # MERGED: needed for timer
 
-from ai_integration import generate_multiple_questions, Question
+from ai_integration import retry_loop, Question
 
 
 class Connection:
@@ -41,7 +41,7 @@ class LobbyManager:
             self.active_connections.remove(connection)
 
     async def start_game(self):
-        q = await generate_multiple_questions(self.lobby.language, self.lobby.difficulty, self.lobby.topic,10)
+        q = await retry_loop(self.lobby.language, self.lobby.difficulty, self.lobby.topic,10)
         game = GameManager(q,self.lobby)
         
         await self.broadcast(json.dumps({

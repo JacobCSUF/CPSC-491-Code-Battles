@@ -113,8 +113,9 @@ async def websocket_game_endpoint(websocket: WebSocket, lobby_id):
         print("Disconnected:", e.code)
         await manager.disconnect(websocket)
 
-    except Exception as e:
-        print("Unexpected error:", e)
-        await manager.disconnect(websocket)
-
+    except WebSocketDisconnect as e:
+        print("Disconnected:", e.code)
+        manager.disconnect(websocket)
+        if not manager.active_connections:  # last player left
+            games.pop(lobby_id, None)
 

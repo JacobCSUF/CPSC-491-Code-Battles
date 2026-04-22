@@ -3,6 +3,8 @@
   <head>
     <title>Game</title>
     <link rel="stylesheet" href="static/game.css">
+    <!-- Add a highlight.js theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   </head>
 
@@ -15,7 +17,6 @@
       Lobby: {{lobby_id}} | Player: {{nickname}}
       {% endif %}
     </div>
-
     <div class="top-right" id="Timer"></div>
   </div>
 
@@ -27,30 +28,38 @@
 
   <div class="game-layout">
 
-  <!-- LEFT SIDE: QUESTION -->
-  <div class="left-panel">
-    <h3 class="question-title">Question</h3>
-
-    <div class="question-box">
-      <pre><code id="question" class="language-python"></code></pre>
+    <!-- LEFT SIDE: QUESTION -->
+    <div class="left-panel">
+      <h3 class="question-title">Question</h3>
+      <div class="question-box">
+        <pre><code id="question" class="language-python"></code></pre>
+      </div>
     </div>
-  </div>
 
-  <!-- RIGHT SIDE: ANSWERS -->
-  <div class="right-panel">
-    <div class="choices-grid">
-      <button id="choice1" class="choice-btn"></button>
-      <button id="choice2" class="choice-btn"></button>
-      <button id="choice3" class="choice-btn"></button>
-      <button id="choice4" class="choice-btn"></button>
+    <!-- RIGHT SIDE: ANSWERS -->
+    <div class="right-panel">
+      <div class="choices-grid">
+        <button id="choice1" class="choice-btn"></button>
+        <button id="choice2" class="choice-btn"></button>
+        <button id="choice3" class="choice-btn"></button>
+        <button id="choice4" class="choice-btn"></button>
+      </div>
     </div>
+
   </div>
-
-</div>
-
 
   <script src="/static/game_scripts.js"></script>
+
+  <script>
+    // Re-highlight whenever question content is updated
+    const questionEl = document.getElementById('question');
+
+    const observer = new MutationObserver(() => {
+      hljs.highlightElement(questionEl);
+    });
+
+    observer.observe(questionEl, { childList: true, characterData: true, subtree: true });
+  </script>
+
 </body>
-
-  <script src="/static/game_scripts.js"></script>
 </html>
