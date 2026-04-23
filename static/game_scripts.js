@@ -1,6 +1,7 @@
 let ws;
 let timeLeft = 60;
 let timerId;
+let previousScore = 0;
 
 function startTimer(timeLimit) {
   const timerElement = document.getElementById("Timer");
@@ -53,6 +54,24 @@ function updatePlayers(players) {
   });
 }
 
+function showScorePopup(delta, x, y) {
+  const popup = document.createElement('div');
+  popup.textContent = delta > 0 ? `+${delta}` : `${delta}`;
+  popup.style.cssText = `
+    position: fixed;
+    left: ${x}px;
+    top: ${y}px;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: ${delta > 0 ? '#2a9d8f' : '#b30000'};
+    pointer-events: none;
+    z-index: 9999;
+    animation: scoreFloat 1.1s ease-out forwards;
+  `;
+  document.body.appendChild(popup);
+  setTimeout(() => popup.remove(), 1100);
+}
+
 function connect() {
   const lobbyId = document.body.dataset.lobbyId;
   const nickname = document.body.dataset.nickname;
@@ -88,10 +107,12 @@ function connect() {
     }
 
     if (state.status === "in_progress") {
-      document.querySelectorAll(".choice-btn").forEach(btn => {
-        btn.disabled = false;
-        btn.classList.remove("disabled");
-      });
+      if (state.new_question === true) {
+        document.querySelectorAll(".choice-btn").forEach(btn => {
+          btn.disabled = false;
+          btn.classList.remove("disabled");
+        });
+      }
 
       const questionElement = document.getElementById("question");
       questionElement.textContent = state.question;
@@ -107,7 +128,23 @@ function connect() {
       for (let i = 0; i < 4; i++) {
         const btn = document.getElementById(`choice${i + 1}`);
         btn.textContent = choices[i];
-        btn.onclick = () => ws.send(JSON.stringify({ type: "answer", answer: choices[i] }));
+        btn.onclick = () => {
+          ws.send(JSON.stringify({ type: "answer", answer: choices[i] }));
+          btn.disabled = true;
+          btn.classList.add("disabled");
+        };
+      }
+
+      // Score popup: diff against previous score for this player
+      const me = state.players.find(p => p.nickname === nickname);
+      if (me) {
+        const delta = me.score - previousScore;
+        if (delta !== 0) {
+          const grid = document.querySelector('.choices-grid');
+          const rect = grid.getBoundingClientRect();
+          showScorePopup(delta, rect.left + rect.width / 2 - 30, rect.top + rect.height / 2);
+        }
+        previousScore = me.score;
       }
 
       updatePlayers(state.players);
